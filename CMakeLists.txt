@@ -60,11 +60,22 @@ add_library(GodotCppLibrary STATIC
 	${GDNATIVECPP_GENERATED_SOURCE_FILES}
 )
 
+set(GDNATIVECPP_COMPAT_INCLUDE )
+if (WIN32)
+	list(APPEND GDNATIVECPP_COMPAT_INCLUDE include/compat/msvc)
+else()
+	if (MINGW)
+		list(APPEND GDNATIVECPP_COMPAT_INCLUDE include/compat/mingw)
+	endif()
+endif()
+
 target_include_directories(GodotCppLibrary PUBLIC
 	godot-cpp/godot_headers
 	godot-cpp/include
 	godot-cpp/include/core
 	godot-cpp/include/gen
+	godot-cpp/godot-headers
+	${GDNATIVECPP_COMPAT_INCLUDE}
 )
 
 target_compile_features(GodotCppLibrary PUBLIC

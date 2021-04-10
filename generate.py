@@ -14,4 +14,4 @@ if not len(sys.argv) > 1:
 # generate godot bindings from a json file
 json_file = sys.argv[1]
 
-binding_generator.generate_bindings(json_file)
+binding_generator.generate_bindings(json_file, True)
