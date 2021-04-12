@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
 
 # GODOT_API_JSON variable is REQUIRED
 set(GODOT_API_JSON "" CACHE FILEPATH "Path to godot_api.json file for bindings generator")
-if (NOT EXISTS "${GODOT_API_JSON}" OR IS_DIRECTORY "${GODOT_API_JSON}")
+if(NOT EXISTS "${GODOT_API_JSON}" OR IS_DIRECTORY "${GODOT_API_JSON}")
 	message(FATAL_ERROR "Path GODOT_API_JSON to godot_api.json file is required")
 endif()
 
@@ -31,11 +31,18 @@ endif()
 project(GodotCpp VERSION 1.0.0 LANGUAGES CXX)
 
 # Force MSVC to statically linking with CRT
-if (MSVC)
+if(MSVC)
 	string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 	string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
+
+if("${GDNATIVECPP_HOST}" STREQUAL "linux" AND "${GDNATIVECPP_TARGET}" STREQUAL "linux")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fPIC")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fPIC")
+endif()
+
 
 # Generate Godot's GDNative <-> C++ bindings using JSON file
 message(STATUS "Generating Godot C++ binding source files...")
@@ -61,12 +68,16 @@ add_library(GodotCppLibrary STATIC
 )
 
 set(GDNATIVECPP_COMPAT_INCLUDE )
-if (WIN32)
-	list(APPEND GDNATIVECPP_COMPAT_INCLUDE include/compat/msvc)
+if(MSVC)
+	list(APPEND GDNATIVECPP_COMPAT_INCLUDE "include/compat/msvc")
 else()
 	if (MINGW)
-		list(APPEND GDNATIVECPP_COMPAT_INCLUDE include/compat/mingw)
+		list(APPEND GDNATIVECPP_COMPAT_INCLUDE "include/compat/mingw")
 	endif()
+endif()
+
+if("${GDNATIVECPP_HOST}" STREQUAL "darwin" AND "${GDNATIVECPP_TARGET}" STREQUAL "darwin")
+	list(APPEND GDNATIVECPP_COMPAT_INCLUDE "include/compat/osx")
 endif()
 
 target_include_directories(GodotCppLibrary PUBLIC
@@ -99,7 +110,7 @@ else()
 		set(LIB_SUFFIX_RELEASE "x11.opt")
 	endif()
 
-	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set(LIB_SUFFIX_DEBUG "${LIB_SUFFIX_DEBUG}.64")
 		set(LIB_SUFFIX_RELEASE "${LIB_SUFFIX_RELEASE}.64")
 	else()
