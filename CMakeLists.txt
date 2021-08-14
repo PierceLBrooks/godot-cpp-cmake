@@ -46,20 +46,20 @@ endif()
 
 # Generate Godot's GDNative <-> C++ bindings using JSON file
 message(STATUS "Generating Godot C++ binding source files...")
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/include/gen/__icalls.hpp")
-	set(GENERATOR_COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/generate.py")
+if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/include/gen/__icalls.hpp")
+	set(GENERATOR_COMMAND "${CMAKE_CURRENT_LIST_DIR}/generate.py")
 	set(GENERATOR_COMMAND "${GENERATOR_COMMAND}" "${GODOT_API_JSON}")
 	execute_process(
 		COMMAND python ${GENERATOR_COMMAND}
-		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/godot-cpp"
 	)
 else()
 	message(STATUS "Bindings are already generated")
 endif()
 
 # List all binding C++ source files
-file(GLOB GDNATIVECPP_CORE_SOURCE_FILES "godot-cpp/src/core/*.cpp")
-file(GLOB GDNATIVECPP_GENERATED_SOURCE_FILES "godot-cpp/src/gen/*.cpp")
+file(GLOB GDNATIVECPP_CORE_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/core/*.cpp")
+file(GLOB GDNATIVECPP_GENERATED_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/gen/*.cpp")
 
 # Create library target
 add_library(GodotCppLibrary STATIC
@@ -123,9 +123,9 @@ endif()
 set_target_properties(GodotCppLibrary PROPERTIES
 	OUTPUT_NAME_DEBUG "godot-cpp.${LIB_SUFFIX_DEBUG}"
 	OUTPUT_NAME_RELEASE "godot-cpp.${LIB_SUFFIX_RELEASE}"
-	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
-	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib"
+	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib"
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL Emscripten)
