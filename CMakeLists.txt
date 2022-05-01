@@ -133,3 +133,5 @@ if(CMAKE_SYSTEM_NAME STREQUAL Emscripten)
 		OUTPUT_NAME_MINSIZEREL "godot-cpp.${LIB_SUFFIX_RELEASE}"
 	)
 endif()
+
+target_compile_features(GodotCppLibrary PUBLIC cxx_std_14)
