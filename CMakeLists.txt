@@ -58,13 +58,21 @@ else()
 endif()
 
 # List all binding C++ source files
+file(GLOB GDNATIVECPP_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/*.cpp")
 file(GLOB GDNATIVECPP_CORE_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/core/*.cpp")
-file(GLOB GDNATIVECPP_GENERATED_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/gen/*.cpp")
+file(GLOB GDNATIVECPP_VARIANT_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/variant/*.cpp")
+file(GLOB GDNATIVECPP_CLASSES_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/src/classes/*.cpp")
+file(GLOB GDNATIVECPP_GENERATED_VARIANT_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/gen/src/variant/*.cpp")
+file(GLOB GDNATIVECPP_GENERATED_CLASSES_SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/gen/src/classes/*.cpp")
 
 # Create library target
 add_library(GodotCppLibrary STATIC
+	${GDNATIVECPP_SOURCE_FILES}
 	${GDNATIVECPP_CORE_SOURCE_FILES}
-	${GDNATIVECPP_GENERATED_SOURCE_FILES}
+	${GDNATIVECPP_VARIANT_SOURCE_FILES}
+	${GDNATIVECPP_CLASSES_SOURCE_FILES}
+	${GDNATIVECPP_GENERATED_VARIANT_SOURCE_FILES}
+	${GDNATIVECPP_GENERATED_CLASSES_SOURCE_FILES}
 )
 
 set(GDNATIVECPP_COMPAT_INCLUDE )
@@ -81,10 +89,10 @@ if("${GDNATIVECPP_HOST}" STREQUAL "darwin" AND "${GDNATIVECPP_TARGET}" STREQUAL 
 endif()
 
 target_include_directories(GodotCppLibrary PUBLIC
-	godot-cpp/godot_headers
 	godot-cpp/include
-	godot-cpp/include/core
-	godot-cpp/include/gen
+	godot-cpp/include/godot_cpp
+        godot-cpp/gen/include
+        godot-cpp/gen/include/godot_cpp
 	godot-cpp/godot-headers
 	${GDNATIVECPP_COMPAT_INCLUDE}
 )
