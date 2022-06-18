@@ -101,6 +101,10 @@ target_compile_features(GodotCppLibrary PUBLIC
 	cxx_std_14
 )
 
+target_compile_definitions(GodotCppLibrary PUBLIC
+	TYPED_METHOD_BIND
+)
+
 # Build library name for the library
 # The formula is: godot-cpp.[system].[opt?].[arch].[lib|a]
 if(CMAKE_SYSTEM_NAME STREQUAL Android)
