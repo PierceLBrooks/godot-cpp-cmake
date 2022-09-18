@@ -46,11 +46,15 @@ endif()
 
 # Generate Godot's GDNative <-> C++ bindings using JSON file
 message(STATUS "Generating Godot C++ binding source files...")
+set(PYTHON_COMMAND "python")
+if(NOT "${GDNATIVECPP_PYTHON}" STREQUAL "")
+    set(PYTHON_COMMAND "${GDNATIVECPP_PYTHON}")
+endif()
 if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/godot-cpp/include/gen/__icalls.hpp")
 	set(GENERATOR_COMMAND "${CMAKE_CURRENT_LIST_DIR}/generate.py")
 	set(GENERATOR_COMMAND "${GENERATOR_COMMAND}" "${GODOT_API_JSON}")
 	execute_process(
-		COMMAND python ${GENERATOR_COMMAND}
+		COMMAND ${PYTHON_COMMAND} ${GENERATOR_COMMAND}
 		WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/godot-cpp"
 	)
 else()
