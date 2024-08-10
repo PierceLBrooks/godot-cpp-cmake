@@ -89,11 +89,12 @@ if("${GDNATIVECPP_HOST}" STREQUAL "darwin" AND "${GDNATIVECPP_TARGET}" STREQUAL 
 endif()
 
 target_include_directories(GodotCppLibrary PUBLIC
-	godot-cpp/include
-	godot-cpp/include/godot_cpp
-        godot-cpp/gen/include
-        godot-cpp/gen/include/godot_cpp
-	godot-cpp/godot-headers
+	${CMAKE_CURRENT_LIST_DIR}
+	${CMAKE_CURRENT_LIST_DIR}/godot-cpp/include
+	${CMAKE_CURRENT_LIST_DIR}/godot-cpp/include/godot_cpp
+        ${CMAKE_CURRENT_LIST_DIR}/godot-cpp/gen/include
+        ${CMAKE_CURRENT_LIST_DIR}/godot-cpp/gen/include/godot_cpp
+	${CMAKE_CURRENT_LIST_DIR}/godot-cpp/godot-headers
 	${GDNATIVECPP_COMPAT_INCLUDE}
 )
 
