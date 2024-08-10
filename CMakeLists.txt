@@ -99,7 +99,7 @@ target_include_directories(GodotCppLibrary PUBLIC
 )
 
 target_compile_features(GodotCppLibrary PUBLIC
-	cxx_std_14
+	cxx_std_17
 )
 
 # Build library name for the library
@@ -143,4 +143,4 @@ if(CMAKE_SYSTEM_NAME STREQUAL Emscripten)
 	)
 endif()
 
-target_compile_features(GodotCppLibrary PUBLIC cxx_std_14)
+target_compile_features(GodotCppLibrary PUBLIC cxx_std_17)
